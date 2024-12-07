@@ -7,5 +7,9 @@ def emotion_detector(text_to_analyse):  # Define a function named sentiment_anal
     myobj = { "raw_document": { "text": text_to_analyse } }  # Create a dictionary with the text to be analyzed
     response = requests.post(url, json = myobj, headers=header)  # Send a POST request to the API with the text and headers
 
+    # Parsing the JSON response from the API
+    formatted_response = json.loads(response.text)
+
     # Return the response 
-    return response.text
+    return formatted_response 
+    
