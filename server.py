@@ -11,20 +11,20 @@ def emot_detector():
     # Pass the text to the function to run the AI analysis and store the JSON response as response
     response = emotion_detector(text_to_analyze)
 
-    # Extract the emotion values from the JSON response
-    emotion_values = response["emotionPredictions"][0]["emotion"]
+    if response["dominant_emotion"] == None:
+        return "Invalid text! Please try again!"
 
-    # Format the emotion values into a string
-    emotion_string = ', '.join([f"'{emotion}': {value}" for emotion, value in emotion_values.items()])
+    else:
+        # Format the emotion values into a string
+        emotion_string = ' , '.join([f"'{emotion}': {value}" for emotion, value in response.items() if emotion != 'dominant_emotion'])
 
-    # Find the dominant emotion (the one with the highest value)
-    dominant_emotion = max(emotion_values, key=emotion_values.get)
-    dominant_value = emotion_values[dominant_emotion]
+        # Extract the dominant emotion (already present in the response)
+        dominant_emotion = response["dominant_emotion"]
 
-    # Prepare the formatted response
-    formatted_response = f"For the given statement, the system response is {emotion_string}. The dominant emotion is {dominant_emotion}."
+        # Prepare the formatted response
+        formatted_response = f"For the given statement, the system response is {emotion_string}. The dominant emotion is {dominant_emotion}"
 
-    return formatted_response
+        return formatted_response
 
 @app.route("/")
 def render_index_page():
@@ -32,4 +32,3 @@ def render_index_page():
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5000, debug=True)
-
